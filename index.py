@@ -15,13 +15,12 @@ from llama_index.postprocessor import SimilarityPostprocessor
 
 
 testFolder = './testfiles/';
-# question = 'What does Katherina likes?'; 
-# question = 'Give me a summary about Katherina and providea list of files that were used'; 
-question = 'What and who can I play games with? Make it a table.'
 llm = Ollama(model="assistant")
 service_context = ServiceContext.from_defaults(
   llm=llm,
-  embed_model='local'
+  embed_model='local',
+  chunk_size=512,
+  chunk_overlap=0
 )
 set_global_service_context(service_context)
 
@@ -48,9 +47,14 @@ response_synthesizer = get_response_synthesizer()
 query_engine = RetrieverQueryEngine(
     retriever=retriever,
     response_synthesizer=response_synthesizer,
-    node_postprocessors=[SimilarityPostprocessor(similarity_cutoff=0.5)],
+    node_postprocessors=[SimilarityPostprocessor(similarity_cutoff=0.7)],
 )
 
 # query
-response = query_engine.query(question)
-print(response)
+try: 
+  while True: 
+    question = input ('>>> ')
+    response = query_engine.query(question)
+    print(response)
+except EOFError:
+  exit()
