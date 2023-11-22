@@ -15,16 +15,17 @@ from llama_index.postprocessor import SimilarityPostprocessor
 
 
 testFolder = './testfiles/';
-question = 'What does Katherina likes?'; 
-llm = Ollama(model="llama2")
+# question = 'What does Katherina likes?'; 
+# question = 'Give me a summary about Katherina and providea list of files that were used'; 
+question = 'What and who can I play games with? Make it a table.'
+llm = Ollama(model="assistant")
 service_context = ServiceContext.from_defaults(
   llm=llm,
-  chunk_size=256,
   embed_model='local'
 )
 set_global_service_context(service_context)
 
-parser = SimpleDirectoryReader(input_dir=testFolder)
+parser = SimpleDirectoryReader(input_dir=testFolder, recursive=True, required_exts=['.md', '.docx', '.txt', '.xlsx', '.pdf'])
 # check if storage already exists
 if not exists("./storage"):
   md_nodes = parser.load_data() 
