@@ -1,56 +1,19 @@
-// docker run -p 8000:8000 -d --rm --name unstructured-api quay.io/unstructured-io/unstructured-api:latest --port 8000 --host 0.0.0.0
-import { UnstructuredDirectoryLoader } from "langchain/document_loaders/fs/unstructured";
-
-const options = {
-  apiUrl: 'http://localhost:8000'
-};
-
-const loader = new UnstructuredDirectoryLoader(
-  "./testfiles/",
-  options
-);
-
-const docs = await loader.load();
-
-
-// import { DirectoryLoader } from "langchain/document_loaders/fs/directory";
-// import {
-//   JSONLoader,
-//   JSONLinesLoader,
-// } from "langchain/document_loaders/fs/json";
-// import { TextLoader } from "langchain/document_loaders/fs/text";
-// import { CSVLoader } from "langchain/document_loaders/fs/csv";
-
-// const loader = new DirectoryLoader(
-//   "./testfiles",
-//   {
-//     ".json": (path) => new JSONLoader(path, "/texts"),
-//     ".jsonl": (path) => new JSONLinesLoader(path, "/html"),
-//     ".txt": (path) => new TextLoader(path),
-//     ".md": (path) => new TextLoader(path),
-//     ".csv": (path) => new CSVLoader(path, "text"),
-//   }
-// );
-// const docs = await loader.load();
-
-import { RecursiveCharacterTextSplitter } from "langchain/text_splitter"
-import { MemoryVectorStore } from "langchain/vectorstores/memory";
-// import { OpenAIEmbeddings } from "langchain/embeddings/openai";
 import { OllamaEmbeddings } from "langchain/embeddings/ollama";
 import { Ollama } from "langchain/llms/ollama";
+import { FaissStore } from "langchain/vectorstores/faiss"
+import { RetrievalQAChain } from "langchain/chains";
 
 const ollama = new Ollama({
   baseUrl: "http://localhost:11434",
   model: "llama2",
 });
 
-
-// Split the text into 500 character chunks. And overlap each chunk by 20 characters
-const textSplitter = new RecursiveCharacterTextSplitter({
- chunkSize: 500,
- chunkOverlap: 20
-});
-const splitDocs = await textSplitter.splitDocuments(docs);
+const template = (question) => `Use the following pieces of information to answer the user's question.
+If you don't know the answer, just say that you don't know, don't try to make up an answer.
+Question: ${question}
+Only return the helpful answer below and nothing else.
+Helpful answer:
+`;
 
 const embeddings = new OllamaEmbeddings({
   model: "assistant", // default value
@@ -61,13 +24,14 @@ const embeddings = new OllamaEmbeddings({
     numGpu: 1,
   },
 });
-// Then use the TensorFlow Embedding to store these chunks in the datastore
-const vectorStore = await MemoryVectorStore.fromDocuments(splitDocs, embeddings);
 
-import { RetrievalQAChain } from "langchain/chains";
+const vectorStore = await FaissStore.load('./faiss', embeddings);
 
-const retriever = vectorStore.asRetriever();
+
+const retriever = vectorStore.asRetriever({
+  k: 5
+});
 const chain = RetrievalQAChain.fromLLM(ollama, retriever);
 const question = 'What and who can I play games with? Make it a table.'
-const result = await chain.call({query: question});
+const result = await chain.call({query: 'Who is Katherina?'});
 console.log(result.text)

@@ -14,6 +14,7 @@
     "@tensorflow/tfjs-converter": "^3.6.0",
     "@tensorflow/tfjs-core": "^3.6.0",
     "@tensorflow/tfjs-node": "^4.10.0",
+    "faiss-node": "^0.5.1",
     "langchain": "^0.0.196",
     "llamaindex": "^0.0.35",
     "ollama-node": "^0.1.27"
