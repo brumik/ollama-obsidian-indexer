@@ -1,0 +1,1 @@
+# This file will be responsible to read the loacl vectors and process the user query

@@ -37,19 +37,18 @@ service_context = ServiceContext.from_defaults(
 
 set_global_service_context(service_context)
 
-parser = SimpleDirectoryReader(input_dir=testFolder, recursive=True, required_exts=['.md', '.docx', '.txt', '.xlsx', '.pdf'])
-# check if storage already exists
-if True or not exists("./storage"):
-  md_nodes = parser.load_data() 
-  # load the documents and create the index
+parser = SimpleDirectoryReader(input_dir=testFolder, recursive=True, filename_as_id=True, required_exts=['.md'])
+md_nodes = parser.load_data() 
+
+if not exists("./storage"):
   index = VectorStoreIndex.from_documents(md_nodes)
-  # store it for later
   index.storage_context.persist()
 else:
-    # load the existing index
   storage_context = StorageContext.from_defaults(persist_dir="./storage")
   index = load_index_from_storage(storage_context)
-
+  refreshed = index.refresh(md_nodes, update_kwargs={"delete_kwargs": {"delete_from_docstore": True}})
+  if (any(refreshed)):
+    index.storage_context.persist()
 
 retriever = VectorIndexRetriever(
     index=index,
