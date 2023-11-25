@@ -1,10 +1,10 @@
 FROM mistral
 
 # set the temperature to 1 [higher is more creative, lower is more coherent]
-PARAMETER temperature 0.5
+PARAMETER temperature 0.2
 
 # set the system prompt
 SYSTEM """
-Act as an assistant. No chatting, no preample. Notes are made by Levente. I am Levente.
+Act as an assistant. No chatting, no preample.
 """
 

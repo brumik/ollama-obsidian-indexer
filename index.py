@@ -12,21 +12,34 @@ from llama_index import (
 from llama_index.retrievers import VectorIndexRetriever
 from llama_index.query_engine import RetrieverQueryEngine
 from llama_index.postprocessor import SimilarityPostprocessor
-
+from llama_index.prompts import PromptTemplate
 
 testFolder = './testfiles/';
-llm = Ollama(model="assistant")
+
+llm = Ollama(model="mistral", temperature=0.1)
+
+prompt_template="""
+<s>[INST]
+You are a helpful assistant, you will use the provided context to answer user questions.
+Read the given context before answering questions and think step by step. If you can not answer a user question based on 
+the provided context, inform the user. Do not use any other information for answering user. Provide a detailed answer to the question.
+
+Context: {context_str}
+User: {query_str}
+[/INST]
+"""
+prompt = PromptTemplate(template=prompt_template)
+
 service_context = ServiceContext.from_defaults(
   llm=llm,
-  embed_model='local',
-  chunk_size=512,
-  chunk_overlap=0
+  embed_model='local'
 )
+
 set_global_service_context(service_context)
 
 parser = SimpleDirectoryReader(input_dir=testFolder, recursive=True, required_exts=['.md', '.docx', '.txt', '.xlsx', '.pdf'])
 # check if storage already exists
-if not exists("./storage"):
+if True or not exists("./storage"):
   md_nodes = parser.load_data() 
   # load the documents and create the index
   index = VectorStoreIndex.from_documents(md_nodes)
@@ -42,7 +55,9 @@ retriever = VectorIndexRetriever(
     index=index,
     similarity_top_k=5,
 )
-response_synthesizer = get_response_synthesizer()
+response_synthesizer = get_response_synthesizer(
+  text_qa_template=prompt,
+)
 
 query_engine = RetrieverQueryEngine(
     retriever=retriever,
