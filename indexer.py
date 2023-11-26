@@ -6,4 +6,5 @@
 
 
 # check if file changed: https://stackoverflow.com/questions/49649102/check-file-has-changed-or-not
-# llama index replace vector of one file?:)
+  # This is probably not needed
+# llama index replace vector of one file?:) Done with refresh
