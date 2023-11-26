@@ -3,3 +3,4 @@
 /.venv
 /testfiles
 /storage
+/__pycache__
