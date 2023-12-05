@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request
+from flask import Flask, request
 from llm import index_dir, index_file, query, delete_index
 
 app = Flask(__name__)
@@ -6,18 +6,14 @@ app = Flask(__name__)
 @app.route('/indexing', methods = ['GET', 'POST', 'PATCH', 'DELETE'])
 def indexing():
     if (request.method == 'GET'):
-        return jsonify({
-            'data': "Indexing is in progress"
-        })
+        return "Indexing is in progress"
 
     if (request.method == 'POST'):
         path = request.json['path']
 
         indexed_count = index_dir(path)
 
-        return jsonify({
-            'data': str(indexed_count) + ' files were indexed.'
-        })
+        return str(indexed_count) + ' new files were (re)indexed.'
 
     if (request.method == 'PATCH'):
         path = request.json['path']
@@ -25,22 +21,16 @@ def indexing():
         indexed_count = index_file(path)
 
         if (indexed_count == 0):
-            return jsonify({
-                'data': 'No update was needed for ' + path + '.'
-            })
+            return 'No update was needed for ' + path + '.'
 
-        return jsonify({
-            'data': path + ' got updated index.'
-        })
+        return path + ' got updated index.'
 
     if (request.method == 'DELETE'):
         file_path = request.json['path']
         # delete the file from the index store
         delete_index(file_path)
 
-        return jsonify({
-            'data': file_path + ' deleted from document store and index'
-        })
+        return file_path + ' deleted from document store and index'
 
 @app.route('/', methods = ['POST'])
 def index():

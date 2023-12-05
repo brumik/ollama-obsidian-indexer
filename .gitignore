@@ -4,3 +4,5 @@
 /testfiles
 /storage
 /__pycache__
+.env
+*.pkl
