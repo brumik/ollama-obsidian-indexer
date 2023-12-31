@@ -1,0 +1,3 @@
+# Obsidian Ollama Chat Indexer
+
+
