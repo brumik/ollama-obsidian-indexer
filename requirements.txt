@@ -41,6 +41,7 @@ pandas==2.1.4
 pydantic==2.5.3
 pydantic_core==2.14.6
 python-dateutil==2.8.2
+python-dotenv==1.0.0
 pytz==2023.3.post1
 PyYAML==6.0.1
 regex==2023.12.25
