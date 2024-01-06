@@ -13,7 +13,7 @@ from llama_index import (
 )
 from llama_index.retrievers import VectorIndexRetriever
 from llama_index.query_engine import RetrieverQueryEngine
-from llama_index.postprocessor import SimilarityPostprocessor
+# from llama_index.postprocessor import SimilarityPostprocessor
 from llama_index.prompts import PromptTemplate
 from langchain.embeddings.huggingface import HuggingFaceBgeEmbeddings
 
@@ -57,7 +57,6 @@ index: VectorStoreIndex = None
 # Indexer helper
 def nodes_to_vector(nodes):
     global index
-    print(nodes)
 
     if not exists(persist_dir):
         index = VectorStoreIndex.from_documents(nodes)
@@ -143,7 +142,6 @@ def query(query):
     query_engine = RetrieverQueryEngine(
         retriever=retriever,
         response_synthesizer=response_synthesizer,
-        # This causes sometimes where there is little context to return Empty context
         # node_postprocessors=[SimilarityPostprocessor(similarity_cutoff=0.5)],
     )
 

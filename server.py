@@ -6,6 +6,7 @@ app = Flask(__name__)
 
 base_path = os.getenv("NOTES_BASE_PATH", "")
 
+
 @app.route("/indexing", methods=["GET", "POST", "PATCH", "DELETE"])
 def indexing():
     if request.method == "GET":
