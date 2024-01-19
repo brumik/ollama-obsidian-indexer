@@ -1,5 +1,6 @@
 # Obsidian Ollama Chat Indexer
 
+This repo is the backend part for the Obsidian plugin found here: https://github.com/brumik/obsidian-ollama-chat
 
 ## Requirements:
 
