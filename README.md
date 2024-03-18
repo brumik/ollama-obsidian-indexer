@@ -4,7 +4,7 @@ This repo is the backend part for the Obsidian plugin found here: https://github
 
 ## Requirements:
 
-* ollama running on `localhost:11434` - read further: https://ollama.ai/
+* ollama running on `localhost:11434` (or other reachable url) - read further: https://ollama.ai/
 * you shoud have installed a model (like 'mistral')
 
 ## Manual run with python3
