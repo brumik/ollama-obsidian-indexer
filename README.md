@@ -27,9 +27,6 @@ is not my main language so any recommendations are welcome.
 
 Feel free to open an issue if you run into one or you would like to see a feature.
 
-[ ] Add hugging face embedding as a env variable (this may mess up the pip innstall requirement file on change, verify)
-
-
 ## Do you like what you see?
 
 As every programmer I convert coffee to code:
