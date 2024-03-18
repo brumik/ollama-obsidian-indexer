@@ -32,18 +32,20 @@ User: {query_str}
 [/INST]
 """
 
+base_url = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
 model = os.getenv("LLM_MODEL", "mistral")
 temperature = float(os.getenv("LLM_TEMPERATURE", 0.1))
 prompt_template = os.getenv("LLM_PROMPT_TEMPLATE", prompt_template)
 persist_dir = os.getenv("INDEXES_PERSIST_DIR", "./storage")
+embed_model_name = os.getenv("EMBEDED_MODEL_HUGGINGFACE_NAME", "BAAI/bge-large-en-v1.5")
 
-# Set up the llm from local mistral
-llm = Ollama(model=model, temperature=temperature)
+# Set up the llm
+llm = Ollama(base_url=base_url, model=model, temperature=temperature)
 
 prompt = PromptTemplate(template=prompt_template)
 
 # Set up service context with our local llm and embedding
-embed_model = HuggingFaceBgeEmbeddings(model_name="BAAI/bge-large-en-v1.5")
+embed_model = HuggingFaceBgeEmbeddings(model_name=embed_model_name)
 service_context = ServiceContext.from_defaults(
     llm=llm,
     embed_model=embed_model
