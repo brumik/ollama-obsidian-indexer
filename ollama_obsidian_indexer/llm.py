@@ -152,3 +152,4 @@ def query(query):
         return response.response
     else:
         return "Response is not a simple response. Maybe it is streamed?"
+

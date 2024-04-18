@@ -1,0 +1,24 @@
+[tool.poetry]
+name = "ollama_obsidian_indexer"
+version = "0.1.0"
+description = "Summarizes a youtube video from a link using transcript and your local ollama"
+authors = ["Levente Berky <levente@berky.me>"]
+readme = "README.md"
+license = "MIT"
+
+[tool.poetry.scripts]
+ollama_obsidian_indexer = 'ollama_obsidian_indexer.index:main'
+
+[tool.poetry.dependencies]
+python = ">=3.10,<3.12"
+flask = "^3.0.3"
+fsspec = "^2024.3.1"
+python-dotenv = "^1.0.1"
+waitress = "^3.0.0"
+llama-hub = "^0.0.79.post1"
+llama-index = "0.9.41"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+

@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 from waitress import serve
 import os
 
-if __name__ == "__main__":
+def main():
     load_dotenv()
     debug = os.getenv("APP_DEVELOPMENT", False)
     port = int(os.getenv("APP_PORT", 5000))
@@ -11,3 +11,7 @@ if __name__ == "__main__":
         app.run(host="0.0.0.0", debug=True, port=port)
     else:
         serve(app, host='0.0.0.0', port=port)
+
+
+if __name__ == "__main__":
+    main()
