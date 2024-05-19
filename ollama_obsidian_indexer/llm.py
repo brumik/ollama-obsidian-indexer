@@ -35,10 +35,11 @@ model = os.getenv("LLM_MODEL", "mistral")
 temperature = float(os.getenv("LLM_TEMPERATURE", 0.1))
 prompt_template = os.getenv("LLM_PROMPT_TEMPLATE", prompt_template)
 persist_dir = os.getenv("INDEXES_PERSIST_DIR", "./storage")
+embed_model_name = os.getenv("OLLAMA_EMBED_MODEL_NAME", "mxbai-embed-large")
 
 ollama_embedding = OllamaEmbedding(
-    model_name="mxbai-embed-large",
-    base_url="http://localhost:11434",
+    model_name=embed_model_name,
+    base_url=base_url,
     ollama_additional_kwargs={"mirostat": 0},
 )
 
