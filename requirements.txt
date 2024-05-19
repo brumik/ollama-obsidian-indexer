@@ -1,8 +1,0 @@
-Flask==3.0.0
-fsspec==2023.12.2
-langchain==0.1.0
-llama_hub==0.0.66
-llama_index==0.9.26
-python-dotenv==1.0.0
-sentence_transformers==2.2.2
-waitress

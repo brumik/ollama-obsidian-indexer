@@ -1,5 +1,5 @@
 from flask import Flask, request
-from llm import index_dir, index_file, query, delete_index
+from .llm import index_dir, index_file, query, delete_index
 import os
 
 app = Flask(__name__)

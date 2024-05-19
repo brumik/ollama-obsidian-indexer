@@ -1,22 +1,20 @@
 from fsspec.core import os
-from llama_index.llms import Ollama
 from os.path import exists
-from llama_index import (
-    Response,
+from llama_index.core import (
     VectorStoreIndex,
+    get_response_synthesizer,
+    PromptTemplate,
     StorageContext,
     load_index_from_storage,
-    ServiceContext,
     SimpleDirectoryReader,
-    set_global_service_context,
-    get_response_synthesizer,
+    Settings,
 )
-from llama_index.retrievers import VectorIndexRetriever
-from llama_index.query_engine import RetrieverQueryEngine
-# from llama_index.postprocessor import SimilarityPostprocessor
-from llama_index.prompts import PromptTemplate
-from langchain.embeddings.huggingface import HuggingFaceBgeEmbeddings
+from llama_index.core.retrievers import VectorIndexRetriever
+from llama_index.embeddings.ollama import OllamaEmbedding
+from llama_index.core.query_engine import RetrieverQueryEngine
+from llama_index.llms.ollama import Ollama
 
+# from llama_index.core.postprocessor import SimilarityPostprocessor
 
 # Set up the recommended template for mistral query
 prompt_template = """
@@ -37,20 +35,21 @@ model = os.getenv("LLM_MODEL", "mistral")
 temperature = float(os.getenv("LLM_TEMPERATURE", 0.1))
 prompt_template = os.getenv("LLM_PROMPT_TEMPLATE", prompt_template)
 persist_dir = os.getenv("INDEXES_PERSIST_DIR", "./storage")
-embed_model_name = os.getenv("EMBEDED_MODEL_HUGGINGFACE_NAME", "BAAI/bge-large-en-v1.5")
+embed_model_name = os.getenv("OLLAMA_EMBED_MODEL_NAME", "mxbai-embed-large")
+
+ollama_embedding = OllamaEmbedding(
+    model_name=embed_model_name,
+    base_url=base_url,
+    ollama_additional_kwargs={"mirostat": 0},
+)
 
 # Set up the llm
-llm = Ollama(base_url=base_url, model=model, temperature=temperature)
+Settings.llm = Ollama(base_url=base_url, model=model, temperature=temperature)
 
 prompt = PromptTemplate(template=prompt_template)
 
 # Set up service context with our local llm and embedding
-embed_model = HuggingFaceBgeEmbeddings(model_name=embed_model_name)
-service_context = ServiceContext.from_defaults(
-    llm=llm,
-    embed_model=embed_model
-)
-set_global_service_context(service_context)
+Settings.embed_model = ollama_embedding
 
 # Set up a global index so we do not need to read from memory all the time
 index: VectorStoreIndex = None
@@ -144,11 +143,8 @@ def query(query):
     query_engine = RetrieverQueryEngine(
         retriever=retriever,
         response_synthesizer=response_synthesizer,
-        # node_postprocessors=[SimilarityPostprocessor(similarity_cutoff=0.5)],
+        # node_postprocessors=[SimilarityPostprocessor(similarity_cutoff=0.7)],
     )
 
     response = query_engine.query(query)
-    if isinstance(response, Response):
-        return response.response
-    else:
-        return "Response is not a simple response. Maybe it is streamed?"
+    return response.response
