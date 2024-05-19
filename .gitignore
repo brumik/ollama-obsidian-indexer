@@ -1,9 +1,6 @@
-/node_modules
-/pip
-/.venv
-/testfiles
-/storage
-/__pycache__
-.env
-*.pkl
+.direnv
+__pycache__/
+*.pyc
 result
+storage
+.env

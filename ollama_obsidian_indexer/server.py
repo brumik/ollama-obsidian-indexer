@@ -1,5 +1,5 @@
 from flask import Flask, request
-from llm import index_dir, index_file, query, delete_index
+from .llm import index_dir, index_file, query, delete_index
 import os
 
 app = Flask(__name__)
@@ -10,6 +10,7 @@ base_path = os.getenv("NOTES_BASE_PATH", "")
 @app.route("/indexing", methods=["GET", "POST", "PATCH", "DELETE"])
 def indexing():
     if request.method == "GET":
+        print(base_path)
         return "Indexing is in progress"
 
     if request.method == "POST":

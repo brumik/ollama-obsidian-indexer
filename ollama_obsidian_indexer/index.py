@@ -1,4 +1,4 @@
-from server import app
+from .server import app
 from dotenv import load_dotenv
 from waitress import serve
 import os
