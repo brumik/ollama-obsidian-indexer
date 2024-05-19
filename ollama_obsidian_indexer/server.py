@@ -10,7 +10,6 @@ base_path = os.getenv("NOTES_BASE_PATH", "")
 @app.route("/indexing", methods=["GET", "POST", "PATCH", "DELETE"])
 def indexing():
     if request.method == "GET":
-        print(base_path)
         return "Indexing is in progress"
 
     if request.method == "POST":
