@@ -24,6 +24,11 @@ The packet comes with nix devenv and compiles to nix package. To build it yourse
 
 This will use the `.env` file that you have. I am figuring out how to define the env variables on runtime.
 
+## Docker
+
+The project ships with a `Dockerfile`. You can use this file in a docker compose. It should use the env variables 
+and start the python service. You still need to pass one way or another the .env file.
+
 ## Further developemnt
 
 I am looking into ways how to create a Dockerfile and copmose file that sets
