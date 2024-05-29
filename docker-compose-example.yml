@@ -1,0 +1,17 @@
+services:
+  indexer:
+    image: ollama-obsidian-indexer:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+#      - "0.0.0.0:5000:5000"  # expose on all interfaces
+    volumes:
+      - ./storage:/app/storage  # persistent storage for the indexer
+      - /path/to/your/vault:/app/notes  # volume for the note vault to use
+    env_file:
+      - .env
+# optional: set environment variables directly
+#    environment:
+#      - OLLAMA_BASE_URL=http://localhost:11434
