@@ -27,7 +27,21 @@ This will use the `.env` file that you have. I am figuring out how to define the
 
 ## Docker
 
-The project ships with a `Dockerfile` and example `docker-compose.yml`. You may either pass your .env file into the container using the `env_file` directive, or set variables directly using `environment`
+The project ships with a `Dockerfile` and example docker-compose file `docker-compose-example.yml`. You may either pass your .env file into the container using `env_file`, or set variables directly using `environment`
+
+to run with docker compose:
+
+1. Copy `ollama_obsidian_indexer/.env.sample` to the root of the project as `.env`
+2. Edit `.env` as needed
+3. Edit the notes volume path placeholder `/path/to/your/vault` to be the absolute path of your obsidian vault
+
+```yaml
+volumes:
+  - ./storage:/app/storage # persistent storage for the indexer
+  - /path/to/your/vault:/app/notes # volume for the note vault to use
+```
+
+4. run `docker compose build` and `docker compose up -d` to run as a service.
 
 ## Further developemnt
 
