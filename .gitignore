@@ -4,3 +4,4 @@ __pycache__/
 result
 storage
 .env
+docker-compose.yml
