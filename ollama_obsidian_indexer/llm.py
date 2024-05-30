@@ -1,5 +1,5 @@
 from fsspec.core import os
-from os.path import exists
+from os.path import exists, join
 from llama_index.core import (
     VectorStoreIndex,
     get_response_synthesizer,
@@ -59,7 +59,7 @@ index: VectorStoreIndex = None
 def nodes_to_vector(nodes):
     global index
 
-    if not exists(persist_dir):
+    if not exists(join(persist_dir, "index_store.json")):
         index = VectorStoreIndex.from_documents(nodes)
         index.storage_context.persist(persist_dir=persist_dir)
         return "Vector created"
