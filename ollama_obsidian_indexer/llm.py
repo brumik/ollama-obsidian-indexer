@@ -105,7 +105,8 @@ def index_dir(dir_path):
         parser = directory_reader_setup(True, dir_path)
         return nodes_to_vector(parser.load_data())
     else:
-        return "No markdown files found in the directory"
+        # No markdown files in the directory
+        return -1
 
 
 def index_file(file_path):

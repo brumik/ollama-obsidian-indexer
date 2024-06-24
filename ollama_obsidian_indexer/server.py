@@ -29,6 +29,8 @@ def indexing():
 
         if indexed_count == 0:
             return "No update was needed for " + path + "."
+        elif indexed_count == -1:
+            return "No file found at " + path + "."
 
         return path + " got updated index."
 
