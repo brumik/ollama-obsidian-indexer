@@ -101,8 +101,12 @@ def directory_reader_setup(is_dir, path):
 
 
 def index_dir(dir_path):
-    parser = directory_reader_setup(True, dir_path)
-    return nodes_to_vector(parser.load_data())
+    if any(fname.endswith(".md") for fname in os.listdir(dir_path)):
+        parser = directory_reader_setup(True, dir_path)
+        return nodes_to_vector(parser.load_data())
+    else:
+        # No markdown files in the directory
+        return -1
 
 
 def index_file(file_path):

@@ -22,10 +22,15 @@ def indexing():
     if request.method == "PATCH":
         path = request.get_json()["path"]
 
-        indexed_count = index_file(os.path.join(base_path, path))
+        if os.path.isdir(os.path.join(base_path, path)):
+            indexed_count = index_dir(os.path.join(base_path, path))
+        else:
+            indexed_count = index_file(os.path.join(base_path, path))
 
         if indexed_count == 0:
             return "No update was needed for " + path + "."
+        elif indexed_count == -1:
+            return "No file found at " + path + "."
 
         return path + " got updated index."
 
